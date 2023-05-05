@@ -1,7 +1,7 @@
 let board = [
-  ["X", "X", "X"],
-  ["X", "X", "0"],
-  ["X", "0", "X"],
+  ["", "", ""],
+  ["", "", ""],
+  ["", "", ""],
 ];
 
 let player1 = "X";
@@ -16,8 +16,8 @@ function draw() {
   let w = width / 3;
   let h = height / 3;
 
-  for (let i = 0; i < 3; i++) {
-    for (let j = 0; j < 3; j++) {
+  for (let j = 0; j < 3; j++) {
+    for (let i = 0; i < 3; i++) {
       let x = w * i + w / 2;
       let y = h * j + h / 2;
       let spot = board[i][j];
