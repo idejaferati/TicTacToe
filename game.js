@@ -16,6 +16,8 @@ function setup() {
   createCanvas(400, 400);
   w = width / 3;
   h = height / 3;
+
+  nextTurn();
 }
 
 function equals3(a,b,c){
@@ -66,14 +68,7 @@ function checkWinner() {
   }
 }
 
-// function nextTurn() {
-//   let index = floor(random(available.length));
-//   let spot = available.splice(index, 1)[0];
-//   let i = spot[0];
-//   let j = spot[1];
-//   board[i][j] = players[currentPlayer];
-//   currentPlayer = (currentPlayer + 1) % players.length;
-// }
+
 
 function mousePressed(){
   if (currentPlayer == person){
@@ -85,19 +80,8 @@ function mousePressed(){
     if (board[i][j]==''){
       board[i][j]=person;
       currentPlayer=person;
+      nextTurn();
 
-      let available=[];
-      for(let k=0; k<3; k++){
-        for(let l=0; l<3; l++){
-          if(board[k][l]==''){
-            available.push({k,l})
-          }
-        }
-      }
-
-      let move=random(available);
-      board[move.k][move.l]=ai;
-      currentPlayer=person;
     }
 
   }
