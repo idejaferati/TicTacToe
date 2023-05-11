@@ -1,15 +1,26 @@
-function nextTurn(){
+function bestMove(){
 
-    let available=[];
+    let bestScore = -Infinity;
+    let bestMove;
     for(let i=0; i<3; i++){
         for(let j=0; j<3; j++){
-            if(board[i][j]==''){
-                available.push({i,j})
+            //me kqyr a eshte i lir katrori
+            if(board[i][j] == ''){
+                board[i][j]=ai;
+                let score=minimax(board);
+                board[i][j]='';
+                if(score>bestScore){
+                    bestScore=score;
+                    bestMove={i,j};
+                }
             }
         }
     }
 
-    let move=random(available);
-    board[move.i][move.j]=ai;
+    board[bestMove.i][bestMove.j]=ai;
     currentPlayer=person;
+}
+
+function minimax(board){
+    return 1;
 }

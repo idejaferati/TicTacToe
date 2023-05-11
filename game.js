@@ -17,7 +17,7 @@ function setup() {
   w = width / 3;
   h = height / 3;
 
-  nextTurn();
+  bestMove();
 }
 
 function equals3(a,b,c){
@@ -80,7 +80,7 @@ function mousePressed(){
     if (board[i][j]==''){
       board[i][j]=person;
       currentPlayer=person;
-      nextTurn();
+      bestMove();
 
     }
 
