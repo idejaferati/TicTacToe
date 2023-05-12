@@ -1,4 +1,3 @@
-
 function bestMove(){
 
     let bestScore = -Infinity;
@@ -23,8 +22,8 @@ function bestMove(){
 }
 
 let scores = {
-    X:1,
-    0:-1,
+    X:10,
+    0:-10,
     tie:0
 }
 function minimax(board, depth,isMaximizing){
@@ -40,7 +39,7 @@ function minimax(board, depth,isMaximizing){
                     board[i][j] = ai;
                     let score = minimax(board, depth + 1, false);
                     board[i][j] = '';
-                    score=max(score,bestScore);
+                    bestScore = max(score, bestScore);
                 }
             }
         }
@@ -53,11 +52,13 @@ function minimax(board, depth,isMaximizing){
                         board[i][j] = person;
                         let score = minimax(board, depth + 1, true);
                         board[i][j] = '';
-                        score =min(score,bestScore);
+                        bestScore =min(score,bestScore);
                     }
                 }
-                return bestScore;
-        }
+            }
+            return bestScore;
+
     }
     return 1;
 }
+
