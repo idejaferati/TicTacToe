@@ -51,7 +51,7 @@ function minimax(board, depth,isMaximizing){
                 for (let j = 0; j < 3; j++) {
                     if (board[i][j] == '') {
                         board[i][j] = person;
-                        let score = minimax(board, depth + 1, false);
+                        let score = minimax(board, depth + 1, true);
                         board[i][j] = '';
                         score =min(score,bestScore);
                     }
