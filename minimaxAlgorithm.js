@@ -1,25 +1,53 @@
-function bestMove(){
+function bestMove() {
+  let bestScore = -Infinity;
+  let move;
 
-    let bestScore = -Infinity;
-    let move;
-    for(let i=0; i<3; i++){
-        for(let j=0; j<3; j++){
-            //me kqyr a eshte i lir katrori
-            if(board[i][j] == ''){
-                board[i][j]=ai;
-                let score=minimax(board,0,false);
-                board[i][j]='';
-                if(score>bestScore){
-                    bestScore=score;
-                    move={i,j};
-                }
-            }
-        }
+  // Check if it is the first move
+  let isFirstMove = true;
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      if (board[i][j] !== '') {
+        isFirstMove = false;
+        break;
+      }
     }
+    if (!isFirstMove) {
+      break;
+    }
+  }
 
-    board[move.i][move.j]=ai;
-    currentPlayer=person;
+  // Play in a random place if it is the first move
+  if (isFirstMove) {
+    let availableMoves = [];
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        if (board[i][j] == '') {
+          availableMoves.push({ i, j });
+        }
+      }
+    }
+    move = random(availableMoves);
+  } else {
+    // Otherwise, use minimax algorithm
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        if (board[i][j] == '') {
+          board[i][j] = ai;
+          let score = minimax(board, 0, false);
+          board[i][j] = '';
+          if (score > bestScore) {
+            bestScore = score;
+            move = { i, j };
+          }
+        }
+      }
+    }
+  }
+
+  board[move.i][move.j] = ai;
+  currentPlayer = person;
 }
+
 
 let scores = {
     X:10,
