@@ -70,18 +70,33 @@ function checkWinner() {
 
 
 
-function mousePressed(){
-  if (currentPlayer == person){
+function mousePressed() {
+  if (document.getElementById('playWithComputer').checked) {
+    // Play with computer
+    if (currentPlayer === person) {
+      let i = floor(mouseX / w);
+      let j = floor(mouseY / h);
 
-    let i=floor(mouseX/w);
-    let j =floor(mouseY/h);
+      if (board[i][j] === '') {
+        board[i][j] = currentPlayer;
+        currentPlayer = ai;
+        if (checkWinner() === null) {
+          bestMove();
+        }
+      }
+    }
+  } else {
+    // Play with another user
+    let i = floor(mouseX / w);
+    let j = floor(mouseY / h);
 
-
-    if (board[i][j]==''){
-      board[i][j]=person;
-      currentPlayer=person;
-      bestMove();
-
+    if (board[i][j] === '') {
+      board[i][j] = currentPlayer;
+      if (currentPlayer === person) {
+        currentPlayer = ai;
+      } else {
+        currentPlayer = person;
+      }
     }
 
   }
