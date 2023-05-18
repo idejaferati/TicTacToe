@@ -1,29 +1,30 @@
 let board = [
-  ["", "", ""],
-  ["", "", ""],
-  ["", "", ""],
+  ['', '', ''],
+  ['', '', ''],
+  ['', '', '']
 ];
 
 let w; //= width / 3;
 let h; //= height / 3;
 
-let ai = "X";
-let person = "0";
+let ai = 'X';
+let person = '0';
 
 let currentPlayer = person;
-
-// let isGameOver = false; // Flag variable to track game over state
+let startingPlayer = 'computer';
 
 function setup() {
   createCanvas(400, 400);
   w = width / 3;
   h = height / 3;
 
-  bestMove();
+  if (startingPlayer === 'computer') {
+    bestMove();
+  }
 }
 
 function equals3(a, b, c) {
-  return a == b && b == c && a != "";
+  return a == b && b == c && a != '';
 }
 
 function checkWinner() {
@@ -50,54 +51,51 @@ function checkWinner() {
     winner = board[0][0];
   }
 
-  if (equals3(board[2][0], board[1][1], board[0][2])) {
+  if (equals3(board[2][0],board[1][1], board[0][2])) {
     winner = board[2][0];
   }
 
   let openSpots = 0;
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
-      if (board[i][j] == "") {
+      if (board[i][j] == '') {
         openSpots++;
       }
     }
   }
 
   if (winner == null && openSpots == 0) {
-    return "tie";
+    return 'tie';
   } else {
     return winner;
   }
 }
 
 function mousePressed() {
-  if (document.getElementById("computer")) {
-    // Play with computer
-    if (currentPlayer === person) {
-      let i = floor(mouseX / w);
-      let j = floor(mouseY / h);
-
-      if (board[i][j] === "") {
-        board[i][j] = currentPlayer;
-        currentPlayer = ai;
-        if (checkWinner() === null) {
-          bestMove();
-        }
-      }
-    }
-  } else if (document.getElementById("friends")) {
-    // Play with another user
+  if (currentPlayer === person) {
     let i = floor(mouseX / w);
     let j = floor(mouseY / h);
 
-    if (board[i][j] === "") {
-      board[i][j] = currentPlayer;
-      if (currentPlayer === person) {
-        currentPlayer = ai;
-      } else {
-        currentPlayer = person;
-      }
+    if (board[i][j] === '') {
+      board[i][j] = person;
+      currentPlayer = ai;
+      bestMove();
     }
+  }
+}
+
+
+function startGame(start) {
+  startingPlayer = start;
+  currentPlayer = start === 'player' ? person : ai;
+  board = [
+    ['', '', ''],
+    ['', '', ''],
+    ['', '', '']
+  ];
+
+  if (startingPlayer === 'computer') {
+    bestMove();
   }
 }
 
@@ -131,13 +129,29 @@ function draw() {
   let result = checkWinner();
   if (result != null) {
     noLoop();
-    let resultP = createP("");
-    resultP.class("result"); // Assign the "result" class to the element
-
-    if (result == "tie") {
-      resultP.html("tie!");
+    let resultP = createP('');
+    resultP.style('font-size', '32pt');
+    if (result == 'tie') {
+      resultP.html('Tie!');
     } else {
       resultP.html(`${result} wins!`);
     }
+  } else {
+    // If the current player is the computer, make its move
+    if (currentPlayer === ai) {
+      bestMove();
+    }
+  }
+}
+
+let result = checkWinner();
+if (result != null) {
+  noLoop();
+  let resultP = createP('');
+  resultP.style('font-size', '32pt');
+  if (result == 'tie') {
+    resultP.html('Tie!');
+  } else {
+    resultP.html(`${result} wins!`);
   }
 }
