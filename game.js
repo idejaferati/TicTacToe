@@ -135,9 +135,10 @@ function handleMove(i, j) {
       if (!isGameOver) {
         playerLabel.html("Computer is thinking...");
           setTimeout(() => {
-            if (!isGameOver)
+            if (!(checkWinner() !== null || isBoardFull())) {
               bestMove();
-            setPlayerLabel();
+              setPlayerLabel();
+            }
           }, 600);
       }
     }
@@ -150,26 +151,6 @@ function handleMove(i, j) {
 }
 
 function mousePressed() {  
-  // Check if the restart button is clicked
-  const buttonRect = restartButton.getBoundingClientRect();
-  const buttonCondition = mouseX >= buttonRect.left &&
-                          mouseX <= buttonRect.right &&
-                          mouseY >= buttonRect.top &&
-                          mouseY <= buttonRect.bottom;
-
-  const switchRect = playSwitch.getBoundingClientRect();
-  const switchCondition = mouseX >= switchRect.left &&
-                        mouseX <= switchRect.right &&
-                        mouseY >= switchRect.top &&
-                        mouseY <= switchRect.bottom;
-
-  if (
-    buttonCondition || switchCondition
-  ) {
-    resetGame();
-    return;
-  }
-
   if (mouseX >= 0 && mouseX <= width && mouseY >= 0 && mouseY <= height) {
     if (playSwitch.checked) {
       if (currentPlayer === player0 && !isGameOver) {
@@ -189,6 +170,27 @@ function mousePressed() {
         setPlayerLabel();
       }
     }
+    return;
+  }
+
+  // Check if the restart button is clicked
+  const buttonRect = restartButton.getBoundingClientRect();
+  const buttonCondition = mouseX >= buttonRect.left &&
+                          mouseX <= buttonRect.right &&
+                          mouseY >= buttonRect.top &&
+                          mouseY <= buttonRect.bottom;
+
+  const switchRect = playSwitch.getBoundingClientRect();
+  const switchCondition = mouseX >= switchRect.left &&
+                        mouseX <= switchRect.right &&
+                        mouseY >= switchRect.top &&
+                        mouseY <= switchRect.bottom;
+
+  if (
+    buttonCondition || switchCondition
+  ) {
+    resetGame();
+    return;
   }
 }
 
