@@ -110,13 +110,16 @@ function resetGame() {
     ["", "", ""],
     ["", "", ""],
   ];
-  currentPlayer = player0;
-
-  setPlayerLabel();
 
   isGameOver = false;
 
   resultP.html(""); // Clear the result label
+
+  bestMove();
+
+  currentPlayer = player0;
+
+  setPlayerLabel();
 
   loop();
 }
