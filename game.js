@@ -115,7 +115,9 @@ function resetGame() {
 
   resultP.html(""); // Clear the result label
 
-  bestMove();
+  if (playSwitch.checked) {
+    bestMove();
+  }
 
   currentPlayer = player0;
 
