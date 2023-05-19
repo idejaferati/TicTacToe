@@ -7,8 +7,8 @@ let board = [
 let w; //= width / 3;
 let h; //= height / 3;
 
-let playerX = "X";
-let player0 = "0";
+const playerX = "X";
+const player0 = "0";
 
 let currentPlayer = player0;
 let playerLabel;
@@ -18,8 +18,7 @@ let resultP;
 
 let isGameOver = false; // Flag variable to track game over state
 
-let playWithComputerCheckbox;
-let isPlayingWithComputer = true;
+let playSwitch;
 
 function setup() {
   createCanvas(400, 400);
@@ -34,8 +33,8 @@ function setup() {
   resultP.class("result"); // Assign the "result" class to the element
 
   bestMove();
-  playWithComputerCheckbox = document.getElementById('playWithComputer');
-  playWithComputerCheckbox.addEventListener('change', togglePlayWithComputer);
+  playSwitch = document.getElementById('playSwitch');
+  playSwitch.addEventListener('change', togglePlayMode);
 
   restartButton = document.getElementById('restartButton');
   // Add a click event listener to the restart button
@@ -100,8 +99,7 @@ function checkWinner() {
   }
 }
 
-function togglePlayWithComputer() {
-  isPlayingWithComputer = playWithComputerCheckbox.checked;
+function togglePlayMode() {
   resetGame();
 }
 
@@ -133,13 +131,14 @@ function handleMove(i, j) {
     }
     setPlayerLabel();
 
-    if (document.getElementById("playWithComputer").checked) {
+    if (playSwitch.checked) {
       if (!isGameOver) {
         playerLabel.html("Computer is thinking...");
           setTimeout(() => {
-            bestMove();
+            if (!isGameOver)
+              bestMove();
             setPlayerLabel();
-          }, 700);
+          }, 600);
       }
     }
 
@@ -153,65 +152,45 @@ function handleMove(i, j) {
 function mousePressed() {  
   // Check if the restart button is clicked
   const buttonRect = restartButton.getBoundingClientRect();
+  const buttonCondition = mouseX >= buttonRect.left &&
+                          mouseX <= buttonRect.right &&
+                          mouseY >= buttonRect.top &&
+                          mouseY <= buttonRect.bottom;
+
+  const switchRect = playSwitch.getBoundingClientRect();
+  const switchCondition = mouseX >= switchRect.left &&
+                        mouseX <= switchRect.right &&
+                        mouseY >= switchRect.top &&
+                        mouseY <= switchRect.bottom;
+
   if (
-    mouseX >= buttonRect.left &&
-    mouseX <= buttonRect.right &&
-    mouseY >= buttonRect.top &&
-    mouseY <= buttonRect.bottom
+    buttonCondition || switchCondition
   ) {
     resetGame();
     return;
   }
 
-  print('mmm');
-  if (document.getElementById("playWithComputer").checked) {
-    if (currentPlayer === player0 && !isGameOver) {
-      let i = floor(mouseX / w);
-      let j = floor(mouseY / h);
-      handleMove(i, j);
+  if (mouseX >= 0 && mouseX <= width && mouseY >= 0 && mouseY <= height) {
+    if (playSwitch.checked) {
+      if (currentPlayer === player0 && !isGameOver) {
+        const i = floor(mouseX / w);
+        const j = floor(mouseY / h);
+        handleMove(i, j);
+      }
+    } else {
+      if (!isGameOver) {
+        const i = floor(mouseX / w);
+        const j = floor(mouseY / h);
+        handleMove(i, j);
+      }
+
+      if (checkWinner() !== null || isBoardFull()) {
+        isGameOver = true;
+        setPlayerLabel();
+      }
     }
-  } else {
-    let i = floor(mouseX / w);
-    let j = floor(mouseY / h);
-    handleMove(i, j);
   }
 }
-
-// function btnPressed(type) {
-//   if (type == "computer") {
-//     // Play with computer
-//     if (currentPlayer === person) {
-//       let i = floor(mouseX / w);
-//       let j = floor(mouseY / h);
-
-//       if (board[i][j] === "") {
-//         board[i][j] = currentPlayer;
-//         currentPlayer = ai;
-//         if (checkWinner() === null) {
-//           bestMove();
-//         }
-//       }
-//     }
-//   } else if (type == "friends") {
-//     // Play with another user
-//     let i = floor(mouseX / w);
-//     let j = floor(mouseY / h);
-
-//     if (board[i][j] === "") {
-//       board[i][j] = currentPlayer;
-//       if (currentPlayer === person) {
-//         currentPlayer = ai;
-//       } else {
-//         currentPlayer = person;
-//       }
-//     }
-
-//   }
-// }
-
-// function restart() {
-//   print('restart');
-// }
 
 function draw() {
   background(255);
@@ -240,14 +219,14 @@ function draw() {
     }
   }
 
-  let result = checkWinner();
+  const result = checkWinner();
   if (result != null) {
     noLoop();
 
     if (result == "tie") {
-      resultP.html("tie!");
+      resultP.html("Tie!");
     } else {
-      resultP.html(`${result} wins!`);
+      resultP.html(`Player ${result == "0" ? 'O' : "X"} wins!`);
     }
   }
 }
