@@ -25,7 +25,9 @@ canvas {
 .buttons {
   display: flex;
   flex-direction: column;
-  transform: translate(-50%, -50%);
+  align-items: center;
+  margin-top: 20px;
+  margin-right: 30px;
 }
 
 .button0 {
@@ -42,10 +44,15 @@ canvas {
 .result {
   font-size: 32pt;
   position: absolute;
-  top: -19px; /* Adjust the top position */
-  left: 50%; /* Adjust the left position */
+  top: -19px;
+  left: 50%;
   transform: translateX(-50%);
   color: red;
+  margin-bottom: 15px;
+}
+
+.player {
+  margin-left: 30px;
 }
 
 .switch-container {
@@ -115,7 +122,17 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 900px) {
+  canvas {
+    width: 50vh!important;
+    height: 50vh!important;
+  }
+  .buttons button {
+    padding: 11px 25px;
+  }
+}
+
+@media screen and (max-width: 700px) {
   canvas {
     width: 40vh!important;
     height: 40vh!important;
