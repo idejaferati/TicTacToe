@@ -2,59 +2,68 @@ function bestMove() {
     let bestScore = -Infinity;
     let move;
 
-
+  
     let isFirstMove = true;
     for (let i = 0; i < 3; i++) {
-        for (let j = 0; j < 3; j++) {
+      for (let j = 0; j < 3; j++) {
             if (board[i][j] !== '') {
-                isFirstMove = false;
-                break;
-            }
+          isFirstMove = false;
+          break;
         }
-        if (!isFirstMove) {
-            break;
-        }
+      }
+      if (!isFirstMove) {
+        break;
+      }
     }
-
+  
     if (isFirstMove) {
-        let availableMoves = [];
-        for (let i = 0; i < 3; i++) {
-            for (let j = 0; j < 3; j++) {
-                if (board[i][j] == '') {
-                    availableMoves.push({ i, j });
-                }
-            }
-        }
-        move = random(availableMoves);
+        move = randomAvailableMove();
     } else {
 //  Use minimax algorithm with alpha-beta pruning
         for (let i = 0; i < 3; i++) {
             for (let j = 0; j < 3; j++) {
                 if (board[i][j] == '') {
-                    board[i][j] = ai;
-                    let score = minimax(board, 0, false, -Infinity, Infinity);
+                    board[i][j] = playerX;
+                    const score = minimax(board, 0, false, -Infinity, Infinity);
                     board[i][j] = '';
-                    if (score > bestScore) {
-                        bestScore = score;
-                        move = { i, j };
-                    }
-                }
+            if (score > bestScore) {
+              bestScore = score;
+              move = { i, j };
             }
+          }
         }
+      }
     }
 
-    board[move.i][move.j] = ai;
-    currentPlayer = person;
-}
+    // if (!move) {
+    //     move = randomAvailableMove();
+    // }
+  
+    board[move.i][move.j] = playerX;
+    currentPlayer = player0;
+  }
 
-let scores = {
+const scores = {
     X: 10,
     0: -10,
     tie: 0
 };
 
+function randomAvailableMove() {
+    let availableMoves = [];
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+              if (board[i][j] == '') {
+          availableMoves.push({ i, j });
+        }
+      }
+    }
+    move = random(availableMoves);
+    return move;
+}
+
 function minimax(board, depth, isMaximizing, alpha, beta) {
-    let result = checkWinner();
+    const result = checkWinner();
     if (result !== null) {
         return scores[result];
     }
@@ -64,8 +73,8 @@ function minimax(board, depth, isMaximizing, alpha, beta) {
         for (let i = 0; i < 3; i++) {
             for (let j = 0; j < 3; j++) {
                 if (board[i][j] == '') {
-                    board[i][j] = ai;
-                    let score = minimax(board, depth + 1, false, alpha, beta);
+                    board[i][j] = playerX;
+                    const score = minimax(board, depth + 1, false, alpha, beta);
                     board[i][j] = '';
                     bestScore = max(score, bestScore);
                     alpha = max(alpha, score);
@@ -81,8 +90,8 @@ function minimax(board, depth, isMaximizing, alpha, beta) {
         for (let i = 0; i < 3; i++) {
             for (let j = 0; j < 3; j++) {
                 if (board[i][j] == '') {
-                    board[i][j] = person;
-                    let score = minimax(board, depth + 1, true, alpha, beta);
+                    board[i][j] = player0;
+                    const score = minimax(board, depth + 1, true, alpha, beta);
                     board[i][j] = '';
                     bestScore = min(score, bestScore);
                     beta = min(beta, score);
@@ -94,5 +103,4 @@ function minimax(board, depth, isMaximizing, alpha, beta) {
         }
         return bestScore;
     }
-    return 1;
 }
